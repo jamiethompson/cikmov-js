@@ -1,0 +1,334 @@
+{
+  "cases": [
+    {
+      "name": "already canonical",
+      "input": "EC1A 1AL",
+      "expected": {
+        "normalised": "EC1A 1AL",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "lowercase normalisation",
+      "input": "ec1a 1al",
+      "expected": {
+        "normalised": "EC1A 1AL",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "noise trimming",
+      "input": "..ec1a@@@1al!!",
+      "expected": {
+        "normalised": "EC1A 1AL",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "hyphenated input",
+      "input": "wc2h-7lt",
+      "expected": {
+        "normalised": "WC2H 7LT",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "extra whitespace",
+      "input": "yo1   7hb",
+      "expected": {
+        "normalised": "YO1 7HB",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "digit confusion I->1",
+      "input": "EC1A IAL",
+      "expected": {
+        "normalised": "EC1A 1AL",
+        "isValid": true,
+        "isCorrected": true,
+        "errors": []
+      }
+    },
+    {
+      "name": "AA9A valid EC",
+      "input": "EC1A 1AA",
+      "expected": {
+        "normalised": "EC1A 1AA",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "AA9A valid NW1W",
+      "input": "NW1W 4AB",
+      "expected": {
+        "normalised": "NW1W 4AB",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "AA9A invalid NW1A",
+      "input": "NW1A 1AA",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["NO_VALID_CANDIDATE"]
+      }
+    },
+    {
+      "name": "digit confusion B->8",
+      "input": "EC1A BAL",
+      "expected": {
+        "normalised": "EC1A 8AL",
+        "isValid": true,
+        "isCorrected": true,
+        "errors": []
+      }
+    },
+    {
+      "name": "letter confusion 8->B",
+      "input": "EC1A 18L",
+      "expected": {
+        "normalised": "EC1A 1BL",
+        "isValid": true,
+        "isCorrected": true,
+        "errors": []
+      }
+    },
+    {
+      "name": "deterministic collapse",
+      "input": "YO1 7H1",
+      "expected": {
+        "normalised": "YO1 7HL",
+        "isValid": true,
+        "isCorrected": true,
+        "errors": []
+      }
+    },
+    {
+      "name": "area confusion Y01",
+      "input": "Y01 7HB",
+      "expected": {
+        "normalised": "YO1 7HB",
+        "isValid": true,
+        "isCorrected": true,
+        "errors": []
+      }
+    },
+    {
+      "name": "area confusion S01",
+      "input": "S01 1AA",
+      "expected": {
+        "normalised": "SO1 1AA",
+        "isValid": true,
+        "isCorrected": true,
+        "errors": []
+      }
+    },
+    {
+      "name": "ambiguous below threshold",
+      "input": "B01 8TH",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["CONFIDENCE_BELOW_THRESHOLD"]
+      }
+    },
+    {
+      "name": "top tie below threshold",
+      "input": "W5J 10T",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["CONFIDENCE_BELOW_THRESHOLD"]
+      }
+    },
+    {
+      "name": "many alternatives below threshold",
+      "input": "8BG GFT",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["CONFIDENCE_BELOW_THRESHOLD"]
+      }
+    },
+    {
+      "name": "digits only",
+      "input": "123456",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["MISSING_REQUIRED_CHARACTER_CLASSES"]
+      }
+    },
+    {
+      "name": "letters only",
+      "input": "ABCDE",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["MISSING_REQUIRED_CHARACTER_CLASSES"]
+      }
+    },
+    {
+      "name": "symbols only",
+      "input": "!!!!",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["INPUT_EMPTY"]
+      }
+    },
+    {
+      "name": "whitespace only",
+      "input": "      ",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["INPUT_EMPTY"]
+      }
+    },
+    {
+      "name": "invalid short",
+      "input": "AA 11",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["NO_VALID_CANDIDATE"]
+      }
+    },
+    {
+      "name": "class mismatch",
+      "input": "A1A A1A",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["NO_VALID_CANDIDATE"]
+      }
+    },
+    {
+      "name": "invalid area",
+      "input": "ZZ99 9ZZ",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["NO_VALID_CANDIDATE"]
+      }
+    },
+    {
+      "name": "forbidden inward letter",
+      "input": "EC1A 1AI",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["NO_VALID_CANDIDATE"]
+      }
+    },
+    {
+      "name": "special GIR",
+      "input": "GIR 0AA",
+      "expected": {
+        "normalised": "GIR 0AA",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "northern ireland",
+      "input": "BT12 6AA",
+      "expected": {
+        "normalised": "BT12 6AA",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "guernsey",
+      "input": "GY1 1AA",
+      "expected": {
+        "normalised": "GY1 1AA",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "jersey",
+      "input": "JE2 4WW",
+      "expected": {
+        "normalised": "JE2 4WW",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "isle of man",
+      "input": "IM1 1AA",
+      "expected": {
+        "normalised": "IM1 1AA",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "non geographic BF",
+      "input": "BF1 0AA",
+      "expected": {
+        "normalised": "BF1 0AA",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "non geographic BX",
+      "input": "BX1 1LT",
+      "expected": {
+        "normalised": "BX1 1LT",
+        "isValid": true,
+        "isCorrected": false,
+        "errors": []
+      }
+    },
+    {
+      "name": "non latin noisy rejection",
+      "input": "東京123",
+      "expected": {
+        "normalised": null,
+        "isValid": false,
+        "isCorrected": false,
+        "errors": ["MISSING_REQUIRED_CHARACTER_CLASSES"]
+      }
+    }
+  ]
+}
